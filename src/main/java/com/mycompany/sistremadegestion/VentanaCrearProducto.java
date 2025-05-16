@@ -27,30 +27,32 @@ public class VentanaCrearProducto extends javax.swing.JFrame {
      * Creates new form VentanaCrearProducto
      */
     private String productoIdSeleccionado = null;
-    
 
     public VentanaCrearProducto() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         // Dentro del constructor o método initComponents después de inicializar la tabla:
-jTableProductos.getSelectionModel().addListSelectionListener(event -> {
-    if (!event.getValueIsAdjusting() && jTableProductos.getSelectedRow() != -1) {
-        int filaSeleccionada = jTableProductos.getSelectedRow();
+        jTableProductos.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && jTableProductos.getSelectedRow() != -1) {
+                int filaSeleccionada = jTableProductos.getSelectedRow();
 
-        String id = jTableProductos.getValueAt(filaSeleccionada, 0).toString(); // columna 0
-        String codigoBarra = jTableProductos.getValueAt(filaSeleccionada, 1).toString();
-        String nombre = jTableProductos.getValueAt(filaSeleccionada, 2).toString();
-        String precio = jTableProductos.getValueAt(filaSeleccionada, 3).toString();
+                String id = jTableProductos.getValueAt(filaSeleccionada, 0).toString(); // columna 0
+                String codigoBarra = jTableProductos.getValueAt(filaSeleccionada, 1).toString();
+                String nombre = jTableProductos.getValueAt(filaSeleccionada, 2).toString();
+                String precio = jTableProductos.getValueAt(filaSeleccionada, 3).toString();
+                String stock = jTableProductos.getValueAt(filaSeleccionada, 4).toString();
 
-        // Guardamos el ID para futuras actualizaciones
-        productoIdSeleccionado = id;
+                // Guardamos el ID para futuras actualizaciones
+                productoIdSeleccionado = id;
 
-        // Asignamos a los campos de texto
-        txtBarCode.setText(codigoBarra);
-        txtName.setText(nombre);
-        tcxPrecio.setText(precio);
-    }
-});
-
+                // Asignamos a los campos de texto
+                txtBarCode.setText(codigoBarra);
+                txtName.setText(nombre);
+                tcxPrecio.setText(precio);
+                txtStock.setText(stock);
+            }
+        });
 
     }
 
@@ -73,6 +75,10 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
         jTableProductos = new javax.swing.JTable();
         btnRefresc = new javax.swing.JButton();
         txtName = new javax.swing.JTextField();
+        txtSerchBarCode = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        txtStock = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -125,28 +131,64 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
             }
         });
 
+        txtSerchBarCode.setText("Buscar");
+        txtSerchBarCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSerchBarCodeActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        txtStock.setText("Stock");
+        txtStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStockActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Stock");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRefresc))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtName)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(tcxPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(tcxPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                             .addComponent(btnSave))
                         .addComponent(txtBarCode))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtStock)
+                                .addGap(110, 110, 110)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRefresc)
+                            .addComponent(txtSerchBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,19 +198,28 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(txtSerchBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tcxPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel3)
+                    .addComponent(btnBuscar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRefresc))
+                    .addComponent(btnSave)
+                    .addComponent(tcxPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRefresc)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -179,24 +230,32 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBarCodeActionPerformed
 
-    
 
-    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-      String precioTexto = this.tcxPrecio.getText().trim(); 
+          String precioTexto = this.tcxPrecio.getText().trim();
     String barCode = this.txtBarCode.getText().trim();
     String nombre = this.txtName.getText().trim();
+    String stockTexto = this.txtStock.getText().trim();
 
-    if (barCode.isEmpty() || precioTexto.isEmpty() || nombre.isEmpty()) {
+    if (barCode.isEmpty() || precioTexto.isEmpty() || nombre.isEmpty() || stockTexto.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
         return;
     }
 
     double precio;
+    int stock;
+
     try {
         precio = Double.parseDouble(precioTexto);
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.");
+        return;
+    }
+
+    try {
+        stock = Integer.parseInt(stockTexto);  // Permitimos negativos
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El stock debe ser un número entero válido.");
         return;
     }
 
@@ -212,26 +271,26 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
 
             if (rs.next()) {
                 // Ya existe: hacemos UPDATE
-                String idExistente = rs.getString("id");
-
-                String updateSql = "UPDATE productos SET nombre = ?, precio = ? WHERE codigo_barra = ?";
+                String updateSql = "UPDATE productos SET nombre = ?, precio = ?, stock = ? WHERE codigo_barra = ?";
                 try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                     updateStmt.setString(1, nombre);
                     updateStmt.setDouble(2, precio);
-                    updateStmt.setString(3, barCode);
+                    updateStmt.setInt(3, stock);
+                    updateStmt.setString(4, barCode);
                     updateStmt.executeUpdate();
                     JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
                 }
 
             } else {
                 // No existe: hacemos INSERT
-                String insertSql = "INSERT INTO productos (id, codigo_barra, nombre, precio) VALUES (?, ?, ?, ?)";
+                String insertSql = "INSERT INTO productos (id, codigo_barra, nombre, precio, stock) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                     String nuevoId = UUID.randomUUID().toString();
                     insertStmt.setString(1, nuevoId);
                     insertStmt.setString(2, barCode);
                     insertStmt.setString(3, nombre);
                     insertStmt.setDouble(4, precio);
+                    insertStmt.setInt(5, stock);
                     insertStmt.executeUpdate();
                     JOptionPane.showMessageDialog(this, "Producto guardado correctamente.");
                 }
@@ -242,17 +301,19 @@ jTableProductos.getSelectionModel().addListSelectionListener(event -> {
         this.txtBarCode.setText("");
         this.tcxPrecio.setText("");
         this.txtName.setText("");
+        this.txtStock.setText("");
 
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "Error al guardar:\n" + e.getMessage());
-    }//GEN-LAST:event_btnSaveActionPerformed
     }
+    }//GEN-LAST:event_btnSaveActionPerformed
     
 
 // Método para cargar los productos desde la base de datos y mostrarlos en el JTable
+   // Método para cargar los productos desde la base de datos y mostrarlos en el JTable
 private void cargarProductos() {
     String url = "jdbc:sqlite:productos.db";
-    String sql = "SELECT id, codigo_barra, nombre, precio FROM productos";
+    String sql = "SELECT id, codigo_barra, nombre, stock, precio FROM productos";
 
     // Modelo de la tabla (columnas que vamos a mostrar)
     DefaultTableModel modelo = new DefaultTableModel();
@@ -260,6 +321,7 @@ private void cargarProductos() {
     modelo.addColumn("Código de Barra");
     modelo.addColumn("Nombre");
     modelo.addColumn("Precio");
+    modelo.addColumn("Stock");
 
     try (Connection conn = DriverManager.getConnection(url);
          Statement stmt = conn.createStatement();
@@ -269,11 +331,12 @@ private void cargarProductos() {
         modelo.setRowCount(0);
 
         while (rs.next()) {
-            Object[] fila = new Object[4];
-            fila[0] = rs.getInt("id"); // Si tienes campo id
+            Object[] fila = new Object[5]; // ahora tiene 5 columnas
+            fila[0] = rs.getInt("id");
             fila[1] = rs.getString("codigo_barra");
             fila[2] = rs.getString("nombre");
-            fila[3] = rs.getDouble("precio");
+            fila[3] = rs.getDouble("precio"); // corregido: "precio" en minúscula
+            fila[4] = rs.getInt("stock");     // corregido: "stock" en minúscula
 
             modelo.addRow(fila);
         }
@@ -286,6 +349,7 @@ private void cargarProductos() {
     }
 }
 
+
     private void btnRefrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescActionPerformed
         // TODO add your handling code here:
         cargarProductos();
@@ -294,6 +358,63 @@ private void cargarProductos() {
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
+
+    private void txtSerchBarCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSerchBarCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSerchBarCodeActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String codigo = this.txtSerchBarCode.getText().trim();
+        buscarProductoPorCodigoBarra(codigo);
+
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockActionPerformed
+    private void buscarProductoPorCodigoBarra(String codigoBarra) {
+    String url = "jdbc:sqlite:productos.db";
+    String sql = "SELECT id, codigo_barra, nombre, precio, stock FROM productos WHERE codigo_barra = ?";
+
+    // Modelo de la tabla (columnas que vamos a mostrar)
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.addColumn("ID");
+    modelo.addColumn("Código de Barra");
+    modelo.addColumn("Nombre");
+    modelo.addColumn("Precio");
+    modelo.addColumn("Stock"); // Nueva columna
+
+    try (Connection conn = DriverManager.getConnection(url);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, codigoBarra);  // Seteamos el código de barra
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+            // Limpiamos filas anteriores
+            modelo.setRowCount(0);
+
+            while (rs.next()) {
+                Object[] fila = new Object[5]; // ahora tiene 5 columnas
+                fila[0] = rs.getInt("id");
+                fila[1] = rs.getString("codigo_barra");
+                fila[2] = rs.getString("nombre");
+                fila[3] = rs.getDouble("precio");
+                fila[4] = rs.getInt("stock"); // Se agrega el stock
+
+                modelo.addRow(fila);
+            }
+
+            // Asignamos el modelo a la tabla
+            this.jTableProductos.setModel(modelo);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar producto:\n" + e.getMessage());
+    }
+}
+
 
     /**
      * @param args the command line arguments
@@ -331,15 +452,19 @@ private void cargarProductos() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRefresc;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableProductos;
     private javax.swing.JTextField tcxPrecio;
     private javax.swing.JTextField txtBarCode;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtSerchBarCode;
+    private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,7 +4,6 @@
  */
 package com.mycompany.sistremadegestion;
 
-
 import com.mycompany.sistremadegestion.models.Producto;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -19,23 +18,34 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author artur
  */
 public class Formulario extends javax.swing.JFrame {
 
-   
-   
     public Formulario() {
         initComponents();
-        tableModel = new DefaultTableModel(new Object[]{"Nombre", "Precio", "Código", "Cantidad","ID"}, 0);
-tablaProductos.setModel(tableModel);
- txtCantidad.setText("1");
+        tableModel = new DefaultTableModel(new Object[]{"Nombre", "Precio", "Código", "Cantidad", "ID"}, 0);
+        tablaProductos.setModel(tableModel);
+        txtCantidad.setText("1");
+        tablaProductos.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tablaProductos.getSelectedRow() != -1) {
+                int row = tablaProductos.getSelectedRow();
+                String nombre = tablaProductos.getValueAt(row, 0).toString();
+                System.out.println("Producto seleccionado: " + nombre);
+
+                // Opcional: mostrar la cantidad actual en el campo txtCantidad
+                String cantidadActual = tablaProductos.getValueAt(row, 3).toString();
+                txtCantidad.setText(cantidadActual);
+            }
+        });
     }
 
-private DefaultTableModel tableModel;
- private List<Producto> carrito = new ArrayList<>();
+    private DefaultTableModel tableModel;
+    private List<Producto> carrito = new ArrayList<>();
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,6 +66,10 @@ private DefaultTableModel tableModel;
         btnPlusCantidad = new javax.swing.JButton();
         txtCantidad = new javax.swing.JTextField();
         btnMenosCantidad = new javax.swing.JButton();
+        btnCaja = new javax.swing.JButton();
+        btnmodificarCantidad = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,6 +115,7 @@ private DefaultTableModel tableModel;
         ));
         jScrollPane1.setViewportView(tablaProductos);
 
+        btnBuy.setForeground(new java.awt.Color(250, 0, 0));
         btnBuy.setText("Comprar");
         btnBuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,7 +123,7 @@ private DefaultTableModel tableModel;
             }
         });
 
-        btnPlusCantidad.setText("+");
+        btnPlusCantidad.setText("mass");
         btnPlusCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPlusCantidadActionPerformed(evt);
@@ -122,141 +137,186 @@ private DefaultTableModel tableModel;
             }
         });
 
-        btnMenosCantidad.setText("-");
+        btnMenosCantidad.setText("menos");
         btnMenosCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenosCantidadActionPerformed(evt);
             }
         });
 
+        btnCaja.setText("Caja");
+        btnCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCajaActionPerformed(evt);
+            }
+        });
+
+        btnmodificarCantidad.setText("Modificar Cantidad");
+        btnmodificarCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodificarCantidadActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar Producto");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("total");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnmodificarCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCaja)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCrearProducto))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(35, 35, 35)
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnMenosCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnPlusCantidad)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnBuy)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                        .addComponent(btnMenosCantidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPlusCantidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuy)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCrearProducto)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBuy)
-                        .addComponent(btnPlusCantidad)
-                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnMenosCantidad)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnmodificarCantidad)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCaja)
+                    .addComponent(btnMenosCantidad)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPlusCantidad)
+                    .addComponent(btnBuy))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCalcular)
                     .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCrearProducto))
+                    .addComponent(btnCrearProducto)
+                    .addComponent(jLabel1))
                 .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void actualizarVistaCarrito() {
+        double total = 0;
+        StringBuilder sb = new StringBuilder();
 
- private void actualizarVistaCarrito() {
-    double total = 0;
-    StringBuilder sb = new StringBuilder();
+        for (Producto p : carrito) {
+            double subtotal = p.getPrecio() * p.getCantidad();
+            sb.append(p.getNombre())
+                    .append(" x").append(p.getCantidad())
+                    .append(" - $")
+                    .append(String.format("%.2f", subtotal))
+                    .append("\n");
+            total += subtotal;
+        }
 
-    for (Producto p : carrito) {
-        double subtotal = p.getPrecio() * p.getCantidad(); // calcular subtotal por producto
-        sb.append(p.getNombre())
-          .append(" x").append(p.getCantidad())
-          .append(" - $")
-          .append(String.format("%.2f", subtotal))
-          .append("\n");
-        total += subtotal;
+        sb.append("").append(String.format("%.2f", total));
+
+        txtResultado.setText(sb.toString());
+
+        // Asegurarse de seguir el orden correcto de columnas:
+        // {"Nombre", "Precio", "Código", "Cantidad", "ID"}
+        tableModel.setRowCount(0);
+        for (Producto p : carrito) {
+            tableModel.addRow(new Object[]{
+                p.getNombre(),
+                String.format("$%.2f", p.getPrecio()),
+                p.getBarCode(),
+                p.getCantidad(),
+                p.getId()
+            });
+        }
     }
-
-    sb.append("\nTOTAL: $").append(String.format("%.2f", total));
-
-    // Mostrar todo en el JTextArea
-    txtResultado.setText(sb.toString());
-
-    // Además, actualizar el JTable con la lista completa
-    tableModel.setRowCount(0);
-    for (Producto p : carrito) {
-        tableModel.addRow(new Object[]{
-            p.getNombre(),
-            String.format("$%.2f", p.getPrecio()),
-            p.getCantidad(),
-            String.format("$%.2f", p.getPrecio() * p.getCantidad()),
-            p.getBarCode(),
-            p.getId()
-        });
-    }
-}
-
 
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-     String barCode = this.txtBarCode.getText();
-    String url = "jdbc:sqlite:productos.db";
-    String sql = "SELECT * FROM productos WHERE codigo_barra = ?";
+        String barCode = this.txtBarCode.getText();
+        String url = "jdbc:sqlite:productos.db";
+        String sql = "SELECT * FROM productos WHERE codigo_barra = ?";
 
-    try (Connection conn = DriverManager.getConnection(url);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
- String cantidadStr = this.txtCantidad.getText();
-        pstmt.setString(1, barCode);
-        ResultSet rs = pstmt.executeQuery();
-  int cantidad = Integer.parseInt(cantidadStr);
-        if (rs.next()) {
-            String id = rs.getString("id");
-            String nombre = rs.getString("nombre");
-            double precio = rs.getDouble("precio");
-            String codigoBarra = rs.getString("codigo_barra");
+        try (Connection conn = DriverManager.getConnection(url); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            String cantidadStr = this.txtCantidad.getText();
+            pstmt.setString(1, barCode);
+            ResultSet rs = pstmt.executeQuery();
+            cantidadStr = cantidadStr.replaceAll("[^\\d]", ""); // elimina todo menos números
+            if (cantidadStr.isEmpty()) {
+                cantidadStr = "1"; // valor por defecto
+            }
+            int cantidad = Integer.parseInt(cantidadStr);
 
-            // Crear producto con todos los campos
-            Producto p = new Producto(nombre, precio, codigoBarra, id,cantidad);
-            carrito.add(p); // Agregar al carrito
+            if (rs.next()) {
+                String id = rs.getString("id");
+                String nombre = rs.getString("nombre");
+                double precio = rs.getDouble("precio");
+                String codigoBarra = rs.getString("codigo_barra");
 
-            actualizarVistaCarrito();
- // Limpiar los campos
-            txtBarCode.setText("");
-            txtCantidad.setText("1"); // O podés dejarlo vacío con ""
-            txtBarCode.requestFocus();
-        } else {
-            JOptionPane.showMessageDialog(this, "Producto no encontrado.");
+                // Crear producto con todos los campos
+                Producto p = new Producto(nombre, precio, codigoBarra, id, cantidad);
+                carrito.add(p); // Agregar al carrito
+
+                actualizarVistaCarrito();
+                // Limpiar los campos
+                txtBarCode.setText("");
+                txtCantidad.setText("1"); // O podés dejarlo vacío con ""
+                txtBarCode.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(this, "Producto no encontrado.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al buscar en la base de datos.");
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al buscar en la base de datos.");
-    }
-    
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     private void txtBarCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBarCodeActionPerformed
@@ -265,8 +325,8 @@ private DefaultTableModel tableModel;
 
     private void btnCrearProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearProductoActionPerformed
         // TODO add your handling code here:
-         VentanaCrearProducto nuevaVentana = new VentanaCrearProducto();
-         nuevaVentana.show();
+        VentanaCrearProducto nuevaVentana = new VentanaCrearProducto();
+        nuevaVentana.show();
     }//GEN-LAST:event_btnCrearProductoActionPerformed
 
     private void txtResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResultadoActionPerformed
@@ -277,107 +337,186 @@ private DefaultTableModel tableModel;
         // TODO add your handling code here:
         String[] opciones = {"Tarjeta", "Efectivo", "Transferencia"};
 
-    int seleccion = JOptionPane.showOptionDialog(
-        this,
-        "¿Cómo desea pagar?",
-        "Método de pago",
-        JOptionPane.DEFAULT_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,
-        opciones,
-        opciones[0]
-    );
+        int seleccion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea pagar?",
+                "Método de pago",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]
+        );
 
-    if (seleccion < 0 || seleccion >= opciones.length) {
-        JOptionPane.showMessageDialog(this, "No seleccionaste ningún método de pago.");
-        return;
-    }
-
-    String metodoPago = opciones[seleccion];
-    JOptionPane.showMessageDialog(this, "Seleccionaste pagar con: " + metodoPago);
-
-    if (carrito.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "El carrito está vacío.");
-        return;
-    }
-
-    Connection conn = null;
-    PreparedStatement stmtCompra = null;
-    PreparedStatement stmtProducto = null;
-    ResultSet generatedKeys = null;
-
-    try {
-        
-        conn = DriverManager.getConnection("jdbc:sqlite:productos.db");
-        conn.setAutoCommit(false);
-
-        // Fecha y hora actual
-        LocalDateTime ahora = LocalDateTime.now();
-        String fecha = ahora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-        // Insertar compra
-        String sqlCompra = "INSERT INTO compras (fecha, metodo_pago) VALUES (?, ?)";
-        stmtCompra = conn.prepareStatement(sqlCompra, Statement.RETURN_GENERATED_KEYS);
-        stmtCompra.setString(1, fecha);
-        stmtCompra.setString(2, metodoPago);
-        stmtCompra.executeUpdate();
-
-        // Obtener ID de compra generada
-        generatedKeys = stmtCompra.getGeneratedKeys();
-        int compraId = -1;
-        if (generatedKeys.next()) {
-            compraId = generatedKeys.getInt(1);
-        } else {
-            throw new SQLException("No se pudo obtener el ID de la compra.");
+        if (seleccion < 0 || seleccion >= opciones.length) {
+            JOptionPane.showMessageDialog(this, "No seleccionaste ningún método de pago.");
+            return;
         }
 
-        // Insertar productos del carrito
-        String sqlProducto = "INSERT INTO comprarProductos (compra_id, producto_id, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
-        stmtProducto = conn.prepareStatement(sqlProducto);
+        String metodoPago = opciones[seleccion];
 
-        for (Producto p : carrito) {
-            stmtProducto.setInt(1, compraId);
-            stmtProducto.setString(2, p.getId());
-            stmtProducto.setInt(3, p.getCantidad());
-            stmtProducto.setDouble(4, p.getPrecio());
-            stmtProducto.addBatch();
+        if (carrito.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El carrito está vacío.");
+            return;
         }
 
-        stmtProducto.executeBatch();
-        conn.commit();
+        Connection conn = null;
+        PreparedStatement stmtCompra = null;
+        PreparedStatement stmtProducto = null;
+        PreparedStatement stmtStock = null;
+        PreparedStatement stmtUpdateStock = null;
+        ResultSet generatedKeys = null;
 
-        JOptionPane.showMessageDialog(this, "Compra registrada correctamente.");
-        carrito.clear(); // Limpiar el carrito después de comprar
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:productos.db");
+            conn.setAutoCommit(false);
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        if (conn != null) {
+            // Verificar stock antes de continuar
+            String sqlStock = "SELECT stock FROM productos WHERE id = ?";
+            stmtStock = conn.prepareStatement(sqlStock);
+
+            for (Producto p : carrito) {
+                stmtStock.setString(1, p.getId());
+                try (ResultSet rs = stmtStock.executeQuery()) {
+                    if (rs.next()) {
+                        int stockActual = rs.getInt("stock");
+                        if (stockActual < p.getCantidad()) {
+                            int opcion = JOptionPane.showConfirmDialog(
+                                    this,
+                                    "El producto '" + p.getNombre() + "' no tiene suficiente stock.\n"
+                                    + "Stock actual: " + stockActual + "\n"
+                                    + "Cantidad en carrito: " + p.getCantidad() + "\n\n"
+                                    + "¿Desea continuar con la compra igualmente?",
+                                    "Stock insuficiente",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.WARNING_MESSAGE
+                            );
+                            if (opcion != JOptionPane.YES_OPTION) {
+                                conn.rollback();
+                                JOptionPane.showMessageDialog(this, "Compra cancelada por falta de stock.");
+                                return;
+                            }
+                        }
+                    } else {
+                        int opcion = JOptionPane.showConfirmDialog(
+                                this,
+                                "El producto '" + p.getNombre() + "' no fue encontrado en la base de datos.\n"
+                                + "¿Desea continuar con la compra igualmente?",
+                                "Producto no encontrado",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                        if (opcion != JOptionPane.YES_OPTION) {
+                            conn.rollback();
+                            JOptionPane.showMessageDialog(this, "Compra cancelada.");
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Insertar compra
+            String sqlCompra = "INSERT INTO compras (fecha, metodo_pago) VALUES (?, ?)";
+            stmtCompra = conn.prepareStatement(sqlCompra, Statement.RETURN_GENERATED_KEYS);
+            String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            stmtCompra.setString(1, fecha);
+            stmtCompra.setString(2, metodoPago);
+            stmtCompra.executeUpdate();
+
+            generatedKeys = stmtCompra.getGeneratedKeys();
+            int compraId = -1;
+            if (generatedKeys.next()) {
+                compraId = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("No se pudo obtener el ID de la compra.");
+            }
+
+            // Insertar productos vendidos
+            String sqlProducto = "INSERT INTO comprarProductos (compra_id, producto_id, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
+            stmtProducto = conn.prepareStatement(sqlProducto);
+
+            // Restar stock
+            String sqlUpdateStock = "UPDATE productos SET stock = stock - ? WHERE id = ?";
+            stmtUpdateStock = conn.prepareStatement(sqlUpdateStock);
+
+            for (Producto p : carrito) {
+                // Insertar producto vendido
+                stmtProducto.setInt(1, compraId);
+                stmtProducto.setString(2, p.getId());
+                stmtProducto.setInt(3, p.getCantidad());
+                stmtProducto.setDouble(4, p.getPrecio());
+                stmtProducto.addBatch();
+
+                // Restar stock
+                stmtUpdateStock.setInt(1, p.getCantidad());
+                stmtUpdateStock.setString(2, p.getId());
+                stmtUpdateStock.addBatch();
+            }
+
+            stmtProducto.executeBatch();
+            stmtUpdateStock.executeBatch();
+
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Compra registrada correctamente.");
+            carrito.clear();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Error al registrar la compra: " + e.getMessage());
+        } finally {
             try {
-                conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                if (stmtCompra != null) {
+                    stmtCompra.close();
+                }
+            } catch (SQLException ignored) {
+            }
+            try {
+                if (stmtProducto != null) {
+                    stmtProducto.close();
+                }
+            } catch (SQLException ignored) {
+            }
+            try {
+                if (stmtStock != null) {
+                    stmtStock.close();
+                }
+            } catch (SQLException ignored) {
+            }
+            try {
+                if (stmtUpdateStock != null) {
+                    stmtUpdateStock.close();
+                }
+            } catch (SQLException ignored) {
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ignored) {
             }
         }
-        JOptionPane.showMessageDialog(this, "Error al registrar la compra: " + e.getMessage());
-    } finally {
-        try { if (stmtCompra != null) stmtCompra.close(); } catch (SQLException ignored) {}
-        try { if (stmtProducto != null) stmtProducto.close(); } catch (SQLException ignored) {}
-        try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
-    }
+
     }//GEN-LAST:event_btnBuyActionPerformed
 
     private void btnPlusCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusCantidadActionPerformed
         // TODO add your handling code here:ç
-       String cantidadStr = this.txtCantidad.getText();
-    
-    try {
-        int cantidad = Integer.parseInt(cantidadStr);
-        cantidad++; // Incrementa en 1
-        this.txtCantidad.setText(String.valueOf(cantidad)); // Actualiza el campo con el nuevo valor
-    } catch (NumberFormatException e) {
-        // Si el texto no es un número, se puede manejar el error
-        this.txtCantidad.setText("1"); // Por ejemplo, reinicia a 1
-    }
+        String cantidadStr = this.txtCantidad.getText();
+
+        try {
+            int cantidad = Integer.parseInt(cantidadStr);
+            cantidad++; // Incrementa en 1
+            this.txtCantidad.setText(String.valueOf(cantidad)); // Actualiza el campo con el nuevo valor
+        } catch (NumberFormatException e) {
+            // Si el texto no es un número, se puede manejar el error
+            this.txtCantidad.setText("1"); // Por ejemplo, reinicia a 1
+        }
     }//GEN-LAST:event_btnPlusCantidadActionPerformed
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
@@ -386,20 +525,101 @@ private DefaultTableModel tableModel;
 
     private void btnMenosCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosCantidadActionPerformed
         // TODO add your handling code here:
-         String cantidadStr = this.txtCantidad.getText();
-    
-    try {
-        int cantidad = Integer.parseInt(cantidadStr);
-        if (cantidad > 1) {
-            cantidad--; // Resta uno si es mayor a 1
-            this.txtCantidad.setText(String.valueOf(cantidad));
+        String cantidadStr = this.txtCantidad.getText();
+
+        try {
+            int cantidad = Integer.parseInt(cantidadStr);
+            if (cantidad > 1) {
+                cantidad--; // Resta uno si es mayor a 1
+                this.txtCantidad.setText(String.valueOf(cantidad));
+            }
+            // Si es 1 o menor, no hace nada
+        } catch (NumberFormatException e) {
+            // Si el valor no es numérico, lo dejamos en 1
+            this.txtCantidad.setText("1");
         }
-        // Si es 1 o menor, no hace nada
-    } catch (NumberFormatException e) {
-        // Si el valor no es numérico, lo dejamos en 1
-        this.txtCantidad.setText("1");
-    }
     }//GEN-LAST:event_btnMenosCantidadActionPerformed
+
+    private void btnCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajaActionPerformed
+        // TODO add your handling code here:
+        caja caja = new caja();
+        caja.show();
+
+    }//GEN-LAST:event_btnCajaActionPerformed
+
+    private void btnmodificarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarCantidadActionPerformed
+        // TODO add your handling code here:
+        int row = tablaProductos.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccioná un producto para modificar la cantidad.");
+            return;
+        }
+
+        // Obtener el ID del producto seleccionado (asumiendo que está en la columna 5 / índice 4)
+        String id = tablaProductos.getValueAt(row, 4).toString();
+
+        String input = JOptionPane.showInputDialog(this, "Nueva cantidad para el producto seleccionado:");
+        if (input == null) {
+            return; // Si canceló el diálogo
+        }
+        try {
+            int nuevaCantidad = Integer.parseInt(input);
+            if (nuevaCantidad <= 0) {
+                JOptionPane.showMessageDialog(this, "Cantidad inválida. Debe ser mayor que cero.");
+                return;
+            }
+
+            // Buscar el producto por ID en el carrito y actualizar cantidad
+            boolean encontrado = false;
+            for (Producto p : carrito) {
+                if (p.getId().equals(id)) {
+                    p.setCantidad(nuevaCantidad);
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (encontrado) {
+                actualizarVistaCarrito();
+                JOptionPane.showMessageDialog(this, "Cantidad actualizada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Producto no encontrado en el carrito.");
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Cantidad inválida. Debe ser un número entero.");
+        }
+    }//GEN-LAST:event_btnmodificarCantidadActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int row = tablaProductos.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccioná un producto para eliminar.");
+            return;
+        }
+
+        // Obtener el ID del producto seleccionado (columna 5 / índice 4)
+        String id = (String) tablaProductos.getValueAt(row, 4);
+
+        // Confirmar eliminación
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro que querés eliminar el producto seleccionado?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Eliminar producto del carrito
+            boolean eliminado = carrito.removeIf(p -> p.getId().equals(id));
+
+            if (eliminado) {
+                actualizarVistaCarrito();
+                JOptionPane.showMessageDialog(this, "Producto eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el producto en el carrito.");
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,11 +658,15 @@ private DefaultTableModel tableModel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuy;
+    private javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalcular;
     private javax.swing.JButton btnCrearProducto;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnMenosCantidad;
     private javax.swing.JButton btnPlusCantidad;
+    private javax.swing.JButton btnmodificarCantidad;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaProductos;
     private javax.swing.JTextField txtBarCode;
